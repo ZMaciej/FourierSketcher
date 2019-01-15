@@ -1,4 +1,6 @@
-public Complex[] FFT(Complex[] x) { // code of FFT copied from here https://introcs.cs.princeton.edu/java/97data/FFT.java.html
+// code of FFT copied from here https://introcs.cs.princeton.edu/java/97data/FFT.java.html
+// works only on arrays with element count = 2^n
+public Complex[] FFT(Complex[] x) {
   int n = x.length;
 
   // base case

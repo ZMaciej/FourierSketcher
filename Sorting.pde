@@ -1,3 +1,20 @@
+public Complex[] SortByFourierOrder(Complex arr[])
+{
+  Complex[] toReturn = new Complex[arr.length];
+  
+  for(int i=0; i< arr.length; i++)
+  {
+    if(i%2==0)
+      toReturn[i]=arr[i/2];
+      else
+      toReturn[i]=arr[arr.length-((i+1)/2)];
+  }
+  
+  return toReturn;
+}
+
+// functions below is not used in the program
+
 int partition(Complex arr[], int low, int high) 
 { 
   double pivot = arr[high].Mag();
@@ -44,7 +61,6 @@ if (low < high)
   }
 }
 
-// it is not used in main program
 public Complex[] sortByMagnitude(Complex arr[], int low, int high) 
 { 
   Complex[] toReturn = new Complex[arr.length];
@@ -54,21 +70,6 @@ public Complex[] sortByMagnitude(Complex arr[], int low, int high)
   }
   
   sort(toReturn,low, high);
-  
-  return toReturn;
-}
-
-public Complex[] SortByFourierOrder(Complex arr[])
-{
-  Complex[] toReturn = new Complex[arr.length];
-  
-  for(int i=0; i< arr.length; i++)
-  {
-    if(i%2==0)
-      toReturn[i]=arr[i/2];
-      else
-      toReturn[i]=arr[arr.length-((i+1)/2)];
-  }
   
   return toReturn;
 }

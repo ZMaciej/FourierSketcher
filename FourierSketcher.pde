@@ -6,11 +6,11 @@ Complex[] ComplexPoints;
 Complex[] PathBeforeFFT;
 Complex[] PathAfterFFT;
 Complex[] SortedAfterFFT;
-int DrawnTrajectoryPointsCount = 2000; //affects speed of drawing and speed of EvaluateEnd() function
+int DrawnTrajectoryPointsCount = 2000; //affects speed of drawing and speed of UpdateDrawnTrajectory() function
 Complex[] DrawnTrajectory = new Complex[DrawnTrajectoryPointsCount];
 boolean UpdateTrajectory=true;
 int FourierRank=500;
-int SizeOfFourierPoints = 1024; //Patch size on which I do Fourier transform; must be power of 2 to proper working FFT 
+int SizeOfFourierPoints = 1024; //Patch size on which I do Fourier transform; must be power of 2 to proper working FFT
 
 void setup() {
   //size(800, 800);
@@ -59,17 +59,17 @@ void setup() {
   }
 }
 
-int i=0;
+int i=0; //which point is actual on animation
 void draw() {
   background(255);
   translate(width/2, height/2);
   
-  if(UpdateTrajectory){
+  if(UpdateTrajectory){ //user input handle
     UpdateDrawnTrajectory();
     UpdateTrajectory=false;
   }
   DrawComplexArray(SortedAfterFFT, FourierRank, true, true);
-  RotateComplexArray(PathAfterFFT);
+  RotateComplexArray(PathAfterFFT); //rotates the complex vectors each by a certain angle
 
   strokeWeight(5);
   stroke(0);
@@ -80,9 +80,9 @@ void draw() {
     int in = (ic+1)%DrawnTrajectory.length;  //next index
     if (!(DrawnTrajectory[in].isNull || DrawnTrajectory[ic].isNull))
     {
-      strokeWeight(5*((float)k/DrawnTrajectory.length));
+      strokeWeight(5*((float)k/DrawnTrajectory.length)); // the thickness of the line varies depending on the distance from the current point
       stroke(0);
-      line((float)DrawnTrajectory[in].Re, (float)DrawnTrajectory[in].Im, (float)DrawnTrajectory[ic].Re, (float)DrawnTrajectory[ic].Im);
+      line((float)DrawnTrajectory[in].Re, (float)DrawnTrajectory[in].Im, (float)DrawnTrajectory[ic].Re, (float)DrawnTrajectory[ic].Im); //lines between all adjacent points
     }
   }
 
@@ -155,9 +155,9 @@ public Complex DrawComplexArray(Complex[] complexArray, int Rank, boolean withCi
   return referencePoint;
 }
 
-public void RotateComplexArray(Complex[] complexArray) //rad is how much the outer line rotates
+public void RotateComplexArray(Complex[] complexArray) //rotatex all vectors little bit
 {
-  double step= 2*PI/DrawnTrajectoryPointsCount;
+  double step= 2*PI/DrawnTrajectoryPointsCount; // distance between DrawnTrajectory[n] and DrawnTrajectory[n+1] will always been drawn with the same amount of time
   int center = complexArray.length/2;
   for (int i=1; i<center; i++)
   {
