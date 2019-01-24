@@ -1,5 +1,5 @@
+import com.hamoid.*;
 import geomerative.*; //library to extract points from Path
-
 RShape Shape;
 RPoint[][] pointPaths;
 Complex[] ComplexPoints;
@@ -11,14 +11,20 @@ Complex[] DrawnTrajectory = new Complex[DrawnTrajectoryPointsCount];
 boolean UpdateTrajectory=true;
 int FourierRank=500;
 int SizeOfFourierPoints = 1024; //Patch size on which I do Fourier transform; must be power of 2 to proper working FFT
-
+VideoExport VideoOut;
+boolean recording=false;
+boolean startRecording = false;
+boolean stopRecording = false;
 void setup() {
-  //size(800, 800);
-  fullScreen();
-  //smooth();
+  size(1080, 1080);
+  //fullScreen();
+  smooth();
+  VideoOut = new VideoExport(this); //startMovie, saveFrame, endMovie
+  VideoOut.setFrameRate(30);
   RG.init(this); //geomerative needs this
-  Shape = RG.loadShape("FacePath.svg");
-  Shape = RG.centerIn(Shape, g); //centering
+  Shape = RG.loadShape("World.svg");
+  float margin = min(width, height)/21;
+  Shape = RG.centerIn(Shape, g, margin); //centering
   RG.setPolygonizer(RG.UNIFORMLENGTH); //Choosing Path to Points Mode: RG.ADAPTATIVE, RG.UNIFORMLENGTH or RG.UNIFORMSTEP
   pointPaths = Shape.getPointsInPaths();
 
@@ -60,11 +66,37 @@ void setup() {
 }
 
 int i=0; //which point is actual on animation
+
+//
+double FourierRankImitation=(double)FourierRank;
+boolean up=false;
+double rankStep = 2.5;
+//
 void draw() {
+
+  //section resposible for automatic rank change START
+  if (recording) {
+    if (FourierRankImitation<SizeOfFourierPoints && up)
+      FourierRankImitation+=rankStep;
+    if (FourierRankImitation>=rankStep && !up)
+      FourierRankImitation-=rankStep;
+    if (FourierRankImitation>500)
+      up=false;
+    if (FourierRankImitation<rankStep)
+    {
+      up=true;
+    }
+    if ((int)FourierRankImitation!=FourierRank) {
+      UpdateTrajectory=true;
+      FourierRank = (int)FourierRankImitation;
+    }
+  }
+  //section resposible for automatic rank change END
+
   background(255);
   translate(width/2, height/2);
-  
-  if(UpdateTrajectory){ //user input handle
+
+  if (UpdateTrajectory) { //user input handle
     UpdateDrawnTrajectory();
     UpdateTrajectory=false;
   }
@@ -92,6 +124,25 @@ void draw() {
   //Shape.draw();
   ellipse((float)DrawnTrajectory[i].Re, (float)DrawnTrajectory[i].Im, 10, 10);
   i = (i+1)%DrawnTrajectory.length;
+
+  if (startRecording)
+  {
+    String name = String.valueOf(year())+"-"+String.valueOf(month())+"-"+String.valueOf(day())+"-"+String.valueOf(hour())+"-"+String.valueOf(minute())+"-"+String.valueOf(second())+".mp4";
+    VideoOut.setMovieFileName(name);
+    VideoOut.startMovie();
+    recording = true;
+    println("video started");
+    startRecording = false;
+  }
+  if (recording)
+    VideoOut.saveFrame();
+  if (stopRecording)
+  {
+    recording = false;
+    VideoOut.endMovie();
+    println("video ended");
+    stopRecording = false;
+  }
 }
 
 void keyPressed() {
@@ -104,6 +155,12 @@ void keyPressed() {
       FourierRank-=step;
       UpdateTrajectory=true;
     }
+  }
+  if (key == 'r' || key == 'R') {
+    if (!recording)
+      startRecording = true; 
+    else
+      stopRecording = true;
   }
 }
 
@@ -120,7 +177,7 @@ public Complex EvaluateEnd(Complex[] complexArray, int Rank) {
   if (Rank > complexArray.length)
     Rank = complexArray.length;
   Complex End = new Complex(0, 0);
-  for (int i=0; i<Rank; i++){
+  for (int i=0; i<Rank; i++) {
     End.Re = End.Re + complexArray[i].Re*scale;
     End.Im = End.Im + complexArray[i].Im*scale;
   }
@@ -205,7 +262,7 @@ class Complex {
     //Complex afterRotation = this.Mult(rotationVector);
     //this.Re = afterRotation.Re;
     //this.Im = afterRotation.Im;
-    
+
     //more efficient way
     double Cos = Math.cos(rotationRad);
     double Sin = Math.sin(rotationRad);
