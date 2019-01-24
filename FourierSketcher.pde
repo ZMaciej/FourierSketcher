@@ -22,7 +22,7 @@ void setup() {
   VideoOut = new VideoExport(this); //startMovie, saveFrame, endMovie
   VideoOut.setFrameRate(30);
   RG.init(this); //geomerative needs this
-  Shape = RG.loadShape("World.svg");
+  Shape = RG.loadShape("FacePath.svg");
   float margin = min(width, height)/21;
   Shape = RG.centerIn(Shape, g, margin); //centering
   RG.setPolygonizer(RG.UNIFORMLENGTH); //Choosing Path to Points Mode: RG.ADAPTATIVE, RG.UNIFORMLENGTH or RG.UNIFORMSTEP
