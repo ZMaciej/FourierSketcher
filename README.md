@@ -10,7 +10,9 @@
 <img src=/img/JosephFourier.png alt="Joseph Fourier" width="500" border="10" />
 
 
-Video:
+Videos:
 
 
 [![FourierSketcher](http://img.youtube.com/vi/uAiydEJMLdY/0.jpg)](http://www.youtube.com/watch?v=uAiydEJMLdY "FourierSketcher")
+
+[![Me](http://img.youtube.com/vi/b1vIPNdie4k/0.jpg)](http://www.youtube.com/watch?v=b1vIPNdie4k "Me")
