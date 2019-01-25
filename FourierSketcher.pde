@@ -6,15 +6,16 @@ Complex[] ComplexPoints;
 Complex[] PathBeforeFFT;
 Complex[] PathAfterFFT;
 Complex[] SortedAfterFFT;
-int DrawnTrajectoryPointsCount = 2000; //affects speed of drawing and speed of UpdateDrawnTrajectory() function
+int DrawnTrajectoryPointsCount = 1700; //affects speed of drawing and speed of UpdateDrawnTrajectory() function
 Complex[] DrawnTrajectory = new Complex[DrawnTrajectoryPointsCount];
 boolean UpdateTrajectory=true;
-int FourierRank=500;
+int FourierRank=750;
 int SizeOfFourierPoints = 1024; //Patch size on which I do Fourier transform; must be power of 2 to proper working FFT
 VideoExport VideoOut;
 boolean recording=false;
 boolean startRecording = false;
 boolean stopRecording = false;
+String ShapeName = "Fourier";
 void setup() {
   size(1080, 1080);
   //fullScreen();
@@ -22,7 +23,7 @@ void setup() {
   VideoOut = new VideoExport(this); //startMovie, saveFrame, endMovie
   VideoOut.setFrameRate(30);
   RG.init(this); //geomerative needs this
-  Shape = RG.loadShape("FacePath.svg");
+  Shape = RG.loadShape(ShapeName+".svg");
   float margin = min(width, height)/21;
   Shape = RG.centerIn(Shape, g, margin); //centering
   RG.setPolygonizer(RG.UNIFORMLENGTH); //Choosing Path to Points Mode: RG.ADAPTATIVE, RG.UNIFORMLENGTH or RG.UNIFORMSTEP
@@ -70,17 +71,17 @@ int i=0; //which point is actual on animation
 //
 double FourierRankImitation=(double)FourierRank;
 boolean up=false;
-double rankStep = 2.5;
+double rankStep = 3;
 //
 void draw() {
 
-  //section resposible for automatic rank change START
+  //section resposible for automatic rank change while recording
   if (recording) {
     if (FourierRankImitation<SizeOfFourierPoints && up)
       FourierRankImitation+=rankStep;
     if (FourierRankImitation>=rankStep && !up)
       FourierRankImitation-=rankStep;
-    if (FourierRankImitation>500)
+    if (FourierRankImitation>750)
       up=false;
     if (FourierRankImitation<rankStep)
     {
@@ -91,7 +92,7 @@ void draw() {
       FourierRank = (int)FourierRankImitation;
     }
   }
-  //section resposible for automatic rank change END
+  //section resposible for automatic rank change while recording
 
   background(255);
   translate(width/2, height/2);
@@ -127,7 +128,7 @@ void draw() {
 
   if (startRecording)
   {
-    String name = String.valueOf(year())+"-"+String.valueOf(month())+"-"+String.valueOf(day())+"-"+String.valueOf(hour())+"-"+String.valueOf(minute())+"-"+String.valueOf(second())+".mp4";
+    String name = String.valueOf(ShapeName+"-"+year())+"-"+String.valueOf(month())+"-"+String.valueOf(day())+"-"+String.valueOf(hour())+"-"+String.valueOf(minute())+"-"+String.valueOf(second())+".mp4";
     VideoOut.setMovieFileName(name);
     VideoOut.startMovie();
     recording = true;
