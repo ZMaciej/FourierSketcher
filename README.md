@@ -7,7 +7,7 @@
 * except for recording it can be changed by up and down arrow keys
 
 
-<img src=/img/JosephFourier.jpg alt="Joseph Fourier" width="500" border="10" />
+<img src=/img/JosephFourier.png alt="Joseph Fourier" width="500" border="10" />
 
 
 [![FourierSketcher](http://img.youtube.com/vi/uAiydEJMLdY/0.jpg)](http://www.youtube.com/watch?v=uAiydEJMLdY "FourierSketcher")
