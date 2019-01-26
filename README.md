@@ -12,7 +12,6 @@
 
 Videos:
 
+[!<img src=/img/Fourier.png alt="Fourier" width="500" border="10" />](http://www.youtube.com/watch?v=uAiydEJMLdY "Fourier")
 
-[![FourierSketcher](http://img.youtube.com/vi/uAiydEJMLdY/0.jpg)](http://www.youtube.com/watch?v=uAiydEJMLdY "FourierSketcher")
-
-[![Me](http://img.youtube.com/vi/b1vIPNdie4k/0.jpg)](http://www.youtube.com/watch?v=b1vIPNdie4k "Me")
+[!<img src=/img/Me.png alt="Joseph Fourier" width="500" border="10" />](http://www.youtube.com/watch?v=b1vIPNdie4k "Me")
