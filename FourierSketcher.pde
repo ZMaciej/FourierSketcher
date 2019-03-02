@@ -1,4 +1,4 @@
-import com.hamoid.*;
+import com.hamoid.*; //library for video recording
 import geomerative.*; //library to extract points from Path
 RShape Shape;
 RPoint[][] pointPaths;
@@ -6,11 +6,11 @@ Complex[] ComplexPoints;
 Complex[] PathBeforeFFT;
 Complex[] PathAfterFFT;
 Complex[] SortedAfterFFT;
-int DrawnTrajectoryPointsCount = 1700; //affects speed of drawing and speed of UpdateDrawnTrajectory() function
+int DrawnTrajectoryPointsCount = 2000; //affects speed of drawing and speed of UpdateDrawnTrajectory() function
 Complex[] DrawnTrajectory = new Complex[DrawnTrajectoryPointsCount];
 boolean UpdateTrajectory=true;
-int FourierRank=750;
-int SizeOfFourierPoints = 1024; //Patch size on which I do Fourier transform; must be power of 2 to proper working FFT
+int FourierRank=1000;
+int SizeOfFourierPoints = 1024; //Patch size on which Fourier transform is done; must be power of 2 to proper working FFT
 VideoExport VideoOut;
 boolean recording=false;
 boolean startRecording = false;
@@ -71,7 +71,8 @@ int i=0; //which point is actual on animation
 //
 double FourierRankImitation=(double)FourierRank;
 boolean up=false;
-double rankStep = 3;
+int rankStep = 2;
+int rankMax = FourierRank;
 //
 void draw() {
 
@@ -79,11 +80,11 @@ void draw() {
   if (recording) {
     if (FourierRankImitation<SizeOfFourierPoints && up)
       FourierRankImitation+=rankStep;
-    if (FourierRankImitation>=rankStep && !up)
+    if (FourierRankImitation>=(rankStep+1) && !up)
       FourierRankImitation-=rankStep;
-    if (FourierRankImitation>750)
+    if (FourierRankImitation>rankMax)
       up=false;
-    if (FourierRankImitation<rankStep)
+    if (FourierRankImitation<(rankStep+1))
     {
       up=true;
     }
