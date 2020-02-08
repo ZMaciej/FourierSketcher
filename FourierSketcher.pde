@@ -19,7 +19,7 @@ String ShapeName = "Fourier";
 void setup() {
   size(1080, 1080);
   //fullScreen();
-  smooth();
+  smooth(2);
   VideoOut = new VideoExport(this); //startMovie, saveFrame, endMovie
   VideoOut.setFrameRate(30);
   RG.init(this); //geomerative needs this
