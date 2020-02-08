@@ -6,16 +6,17 @@ Complex[] ComplexPoints;
 Complex[] PathBeforeFFT;
 Complex[] PathAfterFFT;
 Complex[] SortedAfterFFT;
+FourierVector[][] AllRotationsFourierVectors;
 int DrawnTrajectoryPointsCount = 2000; //affects speed of drawing and speed of UpdateDrawnTrajectory() function
 Complex[] DrawnTrajectory = new Complex[DrawnTrajectoryPointsCount];
 boolean UpdateTrajectory=true;
-int FourierRank=1000;
+int FourierRank=1023;
 int SizeOfFourierPoints = 1024; //Patch size on which Fourier transform is done; must be power of 2 to proper working FFT
 VideoExport VideoOut;
-boolean recording=false;
+boolean recording = false;
 boolean startRecording = false;
 boolean stopRecording = false;
-String ShapeName = "Fourier";
+String ShapeName = "Poland";
 void setup() {
   size(1080, 1080);
   //fullScreen();
@@ -63,16 +64,17 @@ void setup() {
     //where negative frequency means that that particular harmonic rotates clockwise
 
     SortedAfterFFT = SortByFourierOrder(PathAfterFFT);
+    AllRotationsFourierVectors = new FourierVector[DrawnTrajectoryPointsCount][SizeOfFourierPoints];
+    GenerateAllRotationsFourierVectorsMatrix(SortedAfterFFT, PathAfterFFT, AllRotationsFourierVectors);
   }
 }
-
-int i=0; //which point is actual on animation
 
 //
 double FourierRankImitation=(double)FourierRank;
 boolean up=false;
 int rankStep = 2;
-int rankMax = FourierRank;
+int rankMax = FourierRank-1;
+int rotationIndex = 0;
 //
 void draw() {
 
@@ -89,7 +91,7 @@ void draw() {
       up=true;
     }
     if ((int)FourierRankImitation!=FourierRank) {
-      UpdateTrajectory=true;
+      //UpdateTrajectory=true;
       FourierRank = (int)FourierRankImitation;
     }
   }
@@ -98,25 +100,20 @@ void draw() {
   background(255);
   translate(width/2, height/2);
 
-  if (UpdateTrajectory) { //user input handle
-    UpdateDrawnTrajectory();
-    UpdateTrajectory=false;
-  }
-  DrawComplexArray(SortedAfterFFT, FourierRank, true, true);
-  RotateComplexArray(PathAfterFFT); //rotates the complex vectors each by a certain angle
+  DrawAllRotationsFourierVectors(AllRotationsFourierVectors, rotationIndex, FourierRank+1, true, true);
 
   strokeWeight(5);
   stroke(0);
   strokeCap(ROUND);
   strokeJoin(ROUND);
-  for (int k=0; k<DrawnTrajectory.length; k++) {
-    int ic = (k+i+DrawnTrajectory.length)%DrawnTrajectory.length; //curent index
-    int in = (ic+1)%DrawnTrajectory.length;  //next index
-    if (!(DrawnTrajectory[in].isNull || DrawnTrajectory[ic].isNull))
+  for (int k=0; k<DrawnTrajectoryPointsCount; k++) {
+    int ic = (k+rotationIndex)%DrawnTrajectoryPointsCount; //curent index
+    int in = (ic+1)%DrawnTrajectoryPointsCount;  //next index
+    if (!(AllRotationsFourierVectors[in][FourierRank].GlobalEndPoint.isNull || AllRotationsFourierVectors[ic][FourierRank].GlobalEndPoint.isNull))
     {
-      strokeWeight(5*((float)k/DrawnTrajectory.length)); // the thickness of the line varies depending on the distance from the current point
+      strokeWeight(5*((float)k/DrawnTrajectoryPointsCount)); // the thickness of the line varies depending on the distance from the current point
       stroke(0);
-      line((float)DrawnTrajectory[in].Re, (float)DrawnTrajectory[in].Im, (float)DrawnTrajectory[ic].Re, (float)DrawnTrajectory[ic].Im); //lines between all adjacent points
+      line((float)AllRotationsFourierVectors[in][FourierRank].GlobalEndPoint.Re, (float)AllRotationsFourierVectors[in][FourierRank].GlobalEndPoint.Im, (float)AllRotationsFourierVectors[ic][FourierRank].GlobalEndPoint.Re, (float)AllRotationsFourierVectors[ic][FourierRank].GlobalEndPoint.Im); //lines between all adjacent points
     }
   }
 
@@ -124,8 +121,10 @@ void draw() {
   strokeWeight(1);
   fill(255);
   //Shape.draw();
-  ellipse((float)DrawnTrajectory[i].Re, (float)DrawnTrajectory[i].Im, 10, 10);
-  i = (i+1)%DrawnTrajectory.length;
+  ellipse((float)AllRotationsFourierVectors[rotationIndex][FourierRank].GlobalEndPoint.Re, (float)AllRotationsFourierVectors[rotationIndex][FourierRank].GlobalEndPoint.Im, 10, 10);
+
+  rotationIndex+=1;
+  rotationIndex%=DrawnTrajectoryPointsCount;
 
   if (startRecording)
   {
@@ -150,7 +149,7 @@ void draw() {
 void keyPressed() {
   int step = 1;
   if (key == CODED) {
-    if (keyCode == UP && FourierRank<SizeOfFourierPoints) {
+    if (keyCode == UP && FourierRank<(SizeOfFourierPoints-step)) {
       FourierRank+=step;
       UpdateTrajectory=true;
     } else if (keyCode == DOWN && FourierRank>step) {
@@ -169,7 +168,7 @@ void keyPressed() {
 public void UpdateDrawnTrajectory()
 {
   for (int q=0; q<DrawnTrajectoryPointsCount; q++) {
-    DrawnTrajectory[(q+i)%DrawnTrajectoryPointsCount] = EvaluateEnd(SortedAfterFFT, FourierRank);
+    //DrawnTrajectory[(q+i)%DrawnTrajectoryPointsCount] = EvaluateEnd(SortedAfterFFT, FourierRank);
     RotateComplexArray(PathAfterFFT);
   }
 }
@@ -186,35 +185,32 @@ public Complex EvaluateEnd(Complex[] complexArray, int Rank) {
   return End;
 }
 
-public Complex DrawComplexArray(Complex[] complexArray, int Rank, boolean withCircles, boolean withLines)
+public void DrawAllRotationsFourierVectors(FourierVector[][] AllRotationsFourierVectors, int rotationIndex, int Rank, boolean withCircles, boolean withLines)
 {
-  if (Rank > complexArray.length)
-    Rank = complexArray.length;
-  float scale = 1.0/complexArray.length;
-  Complex referencePoint = complexArray[0].Mult(scale);
-  //pushMatrix();
-  //translate((float)complexArray[0].Re*scale,(float)complexArray[0].Im*scale);
+  FourierVector[][] ARFV = AllRotationsFourierVectors;
+  int RI = rotationIndex;
+  if (Rank > ARFV[0].length)
+    Rank = ARFV[0].length;
+
   for (int i=1; i< Rank; i++)
   {
     if (withLines) {
       strokeWeight(1);
-      line((float)referencePoint.Re, (float)referencePoint.Im, (float)referencePoint.Re + (float)complexArray[i].Re*scale, (float)referencePoint.Im+(float)complexArray[i].Im*scale);
+      line((float)ARFV[RI][i-1].GlobalEndPoint.Re, (float)ARFV[RI][i-1].GlobalEndPoint.Im, (float)ARFV[RI][i].GlobalEndPoint.Re, (float)ARFV[RI][i].GlobalEndPoint.Im);
     }
     if (withCircles) {
       noFill();
       strokeWeight(0.5);
-      ellipse((float)referencePoint.Re, (float)referencePoint.Im, (float)complexArray[i].Mag()*2*scale, (float)complexArray[i].Mag()*2*scale);
+      ellipse((float)ARFV[RI][i-1].GlobalEndPoint.Re, (float)ARFV[RI][i-1].GlobalEndPoint.Im, (float)ARFV[RI][i].ComplexVector.Mag()*2, (float)ARFV[RI][i].ComplexVector.Mag()*2);
       fill(0, 128, 255);
-      ellipse((float)referencePoint.Re, (float)referencePoint.Im, 3, 3);
+      ellipse((float)ARFV[RI][i-1].GlobalEndPoint.Re, (float)ARFV[RI][i-1].GlobalEndPoint.Im, 3, 3);
     }
-    referencePoint = referencePoint.Add(complexArray[i].Mult(scale));
   }
   fill(0, 0, 255);
-  ellipse((float)referencePoint.Re, (float)referencePoint.Im, 5, 5);
-  return referencePoint;
+  ellipse((float)ARFV[RI][Rank-1].GlobalEndPoint.Re, (float)ARFV[RI][Rank-1].GlobalEndPoint.Im, 5, 5);
 }
 
-public void RotateComplexArray(Complex[] complexArray) //rotatex all vectors little bit
+public void RotateComplexArray(Complex[] complexArray) //rotate all vectors little bit
 {
   double step= 2*PI/DrawnTrajectoryPointsCount; // distance between DrawnTrajectory[n] and DrawnTrajectory[n+1] will always been drawn with the same amount of time
   int center = complexArray.length/2;
@@ -225,68 +221,18 @@ public void RotateComplexArray(Complex[] complexArray) //rotatex all vectors lit
   }
 }
 
-class Complex {
-  double Re;
-  double Im;
-  Double _magnitude;
-  boolean isNull;
+public void GenerateAllRotationsFourierVectorsMatrix(Complex[] sortedAfterFFT, Complex[] pathAfterFFT, FourierVector[][] AllRotationsFourierVectors)
+{
+  float scale = 1.0/sortedAfterFFT.length;
 
-  public Complex()
-  {
-    isNull=true;
-  }
-
-  public Complex(double re, double im) {
-    Re=re;
-    Im=im;
-    isNull = false;
-  }
-
-  public Complex Add(Complex b) {
-    return new Complex(this.Re + b.Re, this.Im + b.Im);
-  }
-
-  public Complex Sub(Complex b) {
-    return new Complex(this.Re - b.Re, this.Im - b.Im);
-  }
-
-  public Complex Mult(Complex b) {
-    //(a.Re + ia.Im) * (b.Re + ib.Im) = (a.Re * b.Re - a.Im * b.Im) * i(a.Re * b.Im + a.Im + b.Re)
-    return new Complex((this.Re * b.Re) - (this.Im * b.Im), (this.Re * b.Im) + (this.Im * b.Re));
-  }
-
-  public Complex Mult(double scale) {
-    return new Complex(this.Re * scale, this.Im * scale);
-  }
-
-  public void Rotate(double rotationRad) {
-    //Complex rotationVector = new Complex(Math.cos(rotationRad), Math.sin(rotationRad));
-    //Complex afterRotation = this.Mult(rotationVector);
-    //this.Re = afterRotation.Re;
-    //this.Im = afterRotation.Im;
-
-    //more efficient way
-    double Cos = Math.cos(rotationRad);
-    double Sin = Math.sin(rotationRad);
-    double temp = this.Re;
-    this.Re = (this.Re * Cos) - (this.Im * Sin);
-    this.Im = (temp * Sin) + (this.Im * Cos);
-  }
-  public Complex Scale(double scale) {
-    return new Complex(scale*Re, scale*Im);
-  }
-
-  public double Mag()
-  {
-    if (_magnitude == null)
+  for (int j=0; j<DrawnTrajectoryPointsCount; j++) {
+    Complex temp = new Complex(0, 0);
+    for (int i=0; i<sortedAfterFFT.length; i++)
     {
-      _magnitude = Math.sqrt(this.Re*this.Re + this.Im*this.Im);
+      Complex PointCopy = new Complex(sortedAfterFFT[i].Re, sortedAfterFFT[i].Im).Mult(scale);
+      temp = temp.Add(PointCopy);
+      AllRotationsFourierVectors[j][i] = new FourierVector(PointCopy, temp);
     }
-    return _magnitude;
-  }
-
-  @Override
-    public String toString() {
-    return String.format("(%.3f + %.3fi)", Re, Im);
+    RotateComplexArray(pathAfterFFT);
   }
 }
