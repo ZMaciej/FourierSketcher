@@ -1,4 +1,4 @@
-const paths = new Array("Loading", "Loading2", "Fourier", "Poland", "Square", "Woman", "World", "FacePath");
+const paths = new Array("Loading", "Loading2", "Fourier", "Poland", "Square", "Woman", "World");
 var currentPath = 0;
 window.onload = function ()
 {
