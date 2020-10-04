@@ -1,3 +1,11 @@
+:root {
+  --MainColor: #337df2;
+  --SecondaryColor: #5999ff;
+  --LightGrey: #e6e6e6;
+  --MidGrey: #a6a6a6;
+  --LightGreyTrans: #5c5c5c33;
+}
+
 body {
   margin: 0px;
   padding: 0px;
@@ -6,3 +14,45 @@ body {
 html {
   overflow: hidden;
 }
+
+.svgTab {
+  padding: 10px;
+  width: 50%;
+  height: 150px;
+  color: black;
+}
+
+#playPause {
+  position: fixed;
+  top: 60px;
+  left: 10px;
+}
+
+/*------------------------BEGIN Collapse Button Style------------------------*/
+
+.playPauseButton {
+  box-shadow: none;
+  border-color: transparent;
+  background-color: var(--LightGreyTrans);
+  z-index: 9998;
+}
+
+.playPauseButton:hover {
+  border-color: transparent !important;
+  background-color: var(--SecondaryColor) !important;
+}
+
+.playPauseButton:active {
+  box-shadow: none !important;
+  border-color: transparent !important;
+  background-color: var(--MainColor) !important;
+  /*on click*/
+}
+
+.playPauseButton:focus {
+  box-shadow: none;
+  border-color: transparent !important;
+  background-color: var(--LightGreyTrans);
+}
+
+/*------------------------END Collapse Button Style------------------------*/

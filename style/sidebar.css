@@ -1,0 +1,149 @@
+:root {
+  --SideBarWidth: 350px;
+}
+
+.wrapper {
+  display: block;
+}
+
+#settingsIcon {
+  display: inline-flex;
+}
+
+#sidebar {
+  background-color: white;
+  min-width: var(--SideBarWidth);
+  max-width: var(--SideBarWidth);
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  /* top layer */
+  z-index: 9999;
+  transition: margin 0.3s;
+  margin-left: calc(-1 * var(--SideBarWidth));
+  color: var(--MainColor);
+  /* font-family: "Roboto"; */
+}
+
+.sidebarContent {
+  padding: 1.5rem;
+  padding-top: 3rem;
+  padding-bottom: 0.5rem;
+}
+
+#sidebar.active {
+  margin-left: 0;
+}
+
+.overlay {
+  visibility: hidden;
+  position: fixed;
+  top: 0;
+  left: 0;
+  /* full screen */
+  width: 100vw;
+  height: 100vh;
+  /* transparent black */
+  background: rgba(0, 0, 0, 0.6);
+  /* middle layer, i.e. appears below the sidebar */
+  z-index: 9998;
+  opacity: 0;
+  /* animate the transition */
+  transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+}
+
+/* display .overlay when it has the .active class */
+.overlay.active {
+  visibility: visible;
+  opacity: 1;
+}
+
+#dismiss {
+  width: 35px;
+  height: 35px;
+  position: absolute;
+  /* top right corner of the sidebar */
+  top: 15px;
+  left: 25px;
+}
+
+#sidebarCollapse {
+  position: fixed;
+  top: 10px;
+  left: 10px;
+}
+
+.sidebarFooter {
+  position: fixed;
+  bottom: 1.5rem;
+  margin-left: 1.5rem;
+  color: var(--MidGrey);
+  font-size: 14px;
+}
+
+a.link {
+  text-decoration: none;
+  color: var(--SecondaryColor);
+}
+
+a.link:hover {
+  color: var(--MainColor);
+}
+
+/*------------------------BEGIN Collapse Button Style------------------------*/
+
+.sidebarButton {
+  box-shadow: none;
+  border-color: transparent;
+  background-color: var(--LightGreyTrans);
+  z-index: 9998;
+}
+
+.sidebarButton:hover {
+  border-color: transparent !important;
+  background-color: var(--SecondaryColor) !important;
+}
+
+.sidebarButton:active {
+  box-shadow: none !important;
+  border-color: transparent !important;
+  background-color: var(--MainColor) !important;
+  /*on click*/
+}
+
+.sidebarButton:focus {
+  box-shadow: none;
+  border-color: transparent !important;
+  background-color: var(--LightGreyTrans);
+}
+
+/*------------------------END Collapse Button Style------------------------*/
+
+/*------------------------BEGIN Collapse Button Style------------------------*/
+
+.submitButton {
+  box-shadow: none;
+  border-color: transparent;
+  background-color: var(--SecondaryColor);
+}
+
+.submitButton:hover {
+  border-color: transparent !important;
+  background-color: var(--SecondaryColor) !important;
+}
+
+.submitButton:active {
+  box-shadow: none !important;
+  border-color: transparent !important;
+  background-color: var(--MainColor) !important;
+  /*on click*/
+}
+
+.submitButton:focus {
+  box-shadow: 0px 0px 0px 2.5px var(--LightGrey);
+  border-color: transparent !important;
+  background-color: var(--SecondaryColor);
+}
+
+/*------------------------END Collapse Button Style------------------------*/

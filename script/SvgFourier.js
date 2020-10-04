@@ -3,10 +3,12 @@ class SvgFourier
     constructor(svgDocument)
     {
         this.svg = svgDocument;
+        this.Ready = false;
     }
 
     GenerateFourierVectors(Rank, Length, Direction)
     {
+        this.Rank = Rank;
         var points = this.#getPoints(Rank);
         this.Size = {
             Width: points.Width, Height: points.Height
@@ -14,6 +16,7 @@ class SvgFourier
         let fft = new FFT(points.Points);
         fft.Compute();
         this.FourierVectors = new CircleFourierVectors(fft.resultSeries, Length, Direction);
+        this.Ready = true;
     }
 
     #getPoints(Count)

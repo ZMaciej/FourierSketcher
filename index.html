@@ -3,48 +3,71 @@
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta charset="UTF-8" />
-    <script
-      language="javascript"
-      type="text/javascript"
-      src="libs/d3.v6.js"
-    ></script>
-    <script
-      language="javascript"
-      type="text/javascript"
-      src="script/main.js"
-    ></script>
-    <script
-      language="javascript"
-      type="text/javascript"
-      src="script/Complex.js"
-    ></script>
-    <script
-      language="javascript"
-      type="text/javascript"
-      src="script/SvgFourier.js"
-    ></script>
-    <script
-      language="javascript"
-      type="text/javascript"
-      src="script/ComplexPointsPath.js"
-    ></script>
-    <script
-      language="javascript"
-      type="text/javascript"
-      src="script/FourierVector.js"
-    ></script>
-    <script
-      language="javascript"
-      type="text/javascript"
-      src="script/CircleFourierVectors.js"
-    ></script>
-    <script
-      language="javascript"
-      type="text/javascript"
-      src="script/FFT.js"
-    ></script>
+    <script src="libs/d3.v6.js"></script>
+    <script src="script/Main.js"></script>
+    <script src="script/Canvas.js"></script>
+    <script src="script/Sidebar.js"></script>
+    <script src="script/Complex.js"></script>
+    <script src="script/SvgFourier.js"></script>
+    <script src="script/SvgFourierAnimator.js"></script>
+    <script src="script/ComplexPointsPath.js"></script>
+    <script src="script/FourierVector.js"></script>
+    <script src="script/CircleFourierVectors.js"></script>
+    <script src="script/FFT.js"></script>
+    <script src="libs/ajax-jquery-3.4.1.min.js"></script>
+    <script src="libs/bootstrap-4.4.1.min.js"></script>
+    <!-- <script src="libs/jquery.mobile-1.4.5/jquery.mobile-1.4.5.min.js"></script> -->
+    <link rel="stylesheet" href="libs/bootstrap-4.4.1.min.css" />
+    <link rel="stylesheet" href="style/sidebar.css" />
     <link rel="stylesheet" href="style/styles.css" />
+    <link rel="stylesheet" href="libs/FAcss/all.css" />
   </head>
 
-  <body></body>
+  <body>
+    <button
+      type="button"
+      id="sidebarCollapse"
+      class="btn btn-info sidebarButton"
+    >
+      <i class="fa fa-cog" id="settingsIcon"></i>
+    </button>
+
+    <!-- <button type="button" id="playPause" class="btn btn-info playPauseButton">
+      <i class="fa fa-play" id="playPauseIcon"></i>
+    </button> -->
+
+    <div class="overlay"></div>
+    <div id="sidebar">
+      <div id="dismiss">
+        <i class="fas fa-arrow-left"></i>
+      </div>
+
+      <div class="sidebarContent">
+        <div class="paths"></div>
+        <!-- <div>
+          <input type="range" id="rank" name="volume" list="ranks" />
+          <datalist id="ranks">
+            <option value="0"></option>
+            <option value="1"></option>
+            <option value="10"></option>
+            <option value="100"></option>
+            <option value="1000"></option>
+          </datalist>
+          <label for="rank">Rank</label>
+        </div> -->
+      </div>
+
+      <div class="sidebarFooter">
+        Source at
+        <a
+          href="https://github.com/ZMaciej/FourierSketcher"
+          class="link"
+          target="_blank"
+        >
+          <i class="fab fa-github"></i>
+          ZMaciej
+        </a>
+      </div>
+    </div>
+  </body>
 </html>
