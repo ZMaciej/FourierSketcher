@@ -1,6 +1,7 @@
 :root {
   --MainColor: #337df2;
   --SecondaryColor: #5999ff;
+  --SecondaryColorLight: #b5d0fc;
   --LightGrey: #e6e6e6;
   --MidGrey: #a6a6a6;
   --LightGreyTrans: #5c5c5c33;
@@ -16,10 +17,16 @@ html {
 }
 
 .svgTab {
+  margin: 5px;
   padding: 10px;
-  width: 50%;
-  height: 150px;
-  color: black;
+  width: calc(var(--SideBarWidth) / 2 - 50px);
+  height: calc(var(--SideBarWidth) / 2 - 50px);
+}
+
+.svgTab:hover {
+  background-color: var(--SecondaryColorLight);
+  border-radius: 5%;
+  cursor: pointer;
 }
 
 #playPause {

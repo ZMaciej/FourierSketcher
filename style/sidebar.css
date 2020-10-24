@@ -27,9 +27,10 @@
 }
 
 .sidebarContent {
-  padding: 1.5rem;
-  padding-top: 3rem;
-  padding-bottom: 0.5rem;
+  margin: 1.5rem;
+  margin-top: 3rem;
+  margin-bottom: 3.5rem;
+  height: calc(100% - 6.5rem);
 }
 
 #sidebar.active {
