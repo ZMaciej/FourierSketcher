@@ -24,7 +24,7 @@ class SvgFourierAnimator
     SetSvgFourier(svgFourier)
     {
         if (!svgFourier.Ready)
-            svgFourier.GenerateFourierVectors(256, 2000, Rotation.Inverted);
+            svgFourier.GenerateFourierVectors(fourierResolution, 2000, Rotation.Inverted);
         this.SvgFourier = svgFourier;
         this.#computeImageScaleBias()
     }

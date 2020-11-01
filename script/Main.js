@@ -4,6 +4,7 @@ var currentPath = 0;
 var Canvas = null;
 var FourierAnimator = null;
 var OnResizeHandlers = new Array();
+var fourierResolution = 256;
 window.onload = function ()
 {
     window.onresize = OnResize;
@@ -64,7 +65,7 @@ function onSVGload(svgDocs, caller)
 {
     var svg = svgDocs.documentElement;
     CurrentSvgFourier = new SvgFourier(svg);
-    CurrentSvgFourier.GenerateFourierVectors(256, 2000, Rotation.Inverted);
+    CurrentSvgFourier.GenerateFourierVectors(fourierResolution, 2000, Rotation.Inverted);
     FourierAnimator.SetSvgFourier(CurrentSvgFourier);
 }
 
