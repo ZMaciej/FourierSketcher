@@ -12,8 +12,5 @@
 <img src=/img/JosephFourier.png alt="Joseph Fourier" width="500" border="10" />
 
 
-Videos:
-
+Video:
 [<img src=/img/Fourier.png alt="Fourier" width="500" border="10" />](http://www.youtube.com/watch?v=uAiydEJMLdY "Fourier")
-
-[<img src=/img/Me.png alt="Joseph Fourier" width="500" border="10" />](http://www.youtube.com/watch?v=b1vIPNdie4k "Me")
