@@ -1,6 +1,6 @@
 const paths = new Array("Loading", "Loading2", "Fourier", "Poland", "Square", "World");
 var fourierSvgs = {};
-var currentPath = 0;
+var currentPath = 3;
 var Canvas = null;
 var FourierAnimator = null;
 var OnResizeHandlers = new Array();
